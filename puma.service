@@ -1,0 +1,21 @@
+Description=Puma HTTP Server
+After=network.target
+
+[Service]
+Type=notify
+WatchdogSec=10
+
+# Preferably configure a non-privileged user
+# User=
+
+## TODO: Adjust the path to reproduce the issue
+WorkingDirectory=/tmp
+ExecStart=/usr/local/bin/bundle exec puma -C puma.rb -b tcp://0.0.0.0:9292 hello.ru
+ExecReload=/bin/kill -URG $MAINPID
+Restart=always
+
+# Helpful for debugging socket activation, etc.
+# Environment=PUMA_DEBUG=1
+
+[Install]
+WantedBy=multi-user.target
